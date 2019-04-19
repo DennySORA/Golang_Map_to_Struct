@@ -5,6 +5,11 @@
 
 This package is simple Map to Struct function.
 
+Can reflect :
+    int     int8        int16       int32       int64
+    uint    uint8       uint16      uint32      uint64
+    bool    float32     float64     string
+
 This function can doing:
 
 1. Map to struct.
@@ -27,12 +32,6 @@ This function can doing:
 4. Map to struct can add convert function.
     EX. a:10.010 -> a:10.01.
 
-#### Bug:
-
-- Input Only map[string]string and struct all data is string.
-  Because this function is design to SQL get data to GraphQL struct.
-  SQL get data is all string.
-
 #### You can see Test folder Example.
 
 ---
@@ -40,6 +39,11 @@ This function can doing:
 ### Chinese
 
 這是一著簡單的Map轉換Struct的功能。
+
+可以反射：
+    int     int8        int16       int32       int64
+    uint    uint8       uint16      uint32      uint64
+    bool    float32     float64     string
 
 這個function能做到以下功能：
 
@@ -62,12 +66,6 @@ This function can doing:
 
 4. Map 轉換成 Struct 時能給予轉換功能。
     例如：a:10.010 -> a:10.01.
-
-#### Bug:
-
-- 只能使用在map[string]string 跟 結構中輸入的要是『字串』。
-  因為這原本是設計時是為了SQL取完數據之後轉到GraphQL結構用的。
-  而SQL取出來都是『字串』.
 
 #### 可以看Test資料夾的資料。
 
