@@ -8,12 +8,12 @@ import (
 )
 
 type A struct {
-	Data string
+	Data float32
 }
 
 func main() {
-	InA := map[string]string{
-		"Data": "10",
+	InA := map[string]int{
+		"Data": 10,
 	}
 	OutA := &A{}
 	err := MapToStruct.DecodeStructFromMap(InA, OutA, nil, nil)
@@ -94,6 +94,10 @@ func main() {
 
 func ConvertStrCut(number reflect.Value) reflect.Value {
 	r, _ := regexp.Compile(`(-?[0-9]+)((\.0+)|(\.[0-9]+?))0*$`)
-	Temp := r.ReplaceAllString(number.Interface().(string), "$1$4")
-	return reflect.ValueOf(Temp)
+	if val, ok := number.Interface().(string); ok {
+		Temp := r.ReplaceAllString(val, "$1$4")
+		return reflect.ValueOf(Temp)
+	} else {
+		return number
+	}
 }

@@ -7,28 +7,28 @@ import (
 )
 
 type decodeStruct struct {
-	mapData         interface{}
 	structData      interface{}
 	mapToStructName map[string]string
 	extend          map[string]interface{}
 	key             string
-	value           interface{}
+	value           Values
 }
 
 func DecodeStructFromMap(mapData interface{}, structData interface{}, mapToStructName map[string]string, extend map[string]interface{}) error {
 	mapType := checkType(mapData)
 	if mapType == "__[]Map" {
+		mapDataConvert := reflect.ValueOf(mapData)
 		// -------------------------------------
 		valElemType := reflect.ValueOf(structData).Elem().Type()
-		DataCount := len(mapData.([]map[string]string))
+		DataCount := mapDataConvert.Len()
 		NewSlice := reflect.MakeSlice(valElemType, DataCount, DataCount)
 		// -------------------------------------
-		for count, sliceData := range mapData.([]map[string]string) {
+		for count := 0; count < mapDataConvert.Len(); count++ {
 			currentField := NewSlice.Index(count)
 			if mapToStructName == nil {
 				mapToStructName = GetStructName(currentField)
 			}
-			DecodeStructFromMap(sliceData, currentField, mapToStructName, extend)
+			DecodeStructFromMap(mapDataConvert.Index(count).Interface(), currentField, mapToStructName, extend)
 		}
 		reflect.ValueOf(structData).Elem().Set(NewSlice)
 		return nil
@@ -38,15 +38,15 @@ func DecodeStructFromMap(mapData interface{}, structData interface{}, mapToStruc
 		if mapToStructName == nil {
 			mapToStructName = GetStructName(structData)
 		}
+		mapDataConvert := mapConvert(mapData)
 		// -------------------------------------
 		decodeStructInput := decodeStruct{
-			mapData:         mapData,
 			structData:      structData,
 			mapToStructName: mapToStructName,
 			extend:          extend,
 		}
 		// -------------------------------------
-		for key, value := range mapData.(map[string]string) {
+		for key, value := range mapDataConvert {
 			decodeStructInput.key = key
 			decodeStructInput.value = value
 			decodeStructInput.setField()
@@ -74,7 +74,37 @@ func (std *decodeStruct) setField() error {
 		return fmt.Errorf("Cannot set %s field value", key)
 	}
 	// -------------------------------------
-	val := reflect.ValueOf(fmt.Sprintf("%v", std.value))
+	var val reflect.Value
+	switch structFieldValue.Kind() {
+	case reflect.Bool:
+		val = reflect.ValueOf(std.value.GetBool())
+	case reflect.Int:
+		val = reflect.ValueOf(std.value.GetInt())
+	case reflect.Int8:
+		val = reflect.ValueOf(std.value.GetInt8())
+	case reflect.Int16:
+		val = reflect.ValueOf(std.value.GetInt16())
+	case reflect.Int32:
+		val = reflect.ValueOf(std.value.GetInt32())
+	case reflect.Int64:
+		val = reflect.ValueOf(std.value.GetInt64())
+	case reflect.Uint:
+		val = reflect.ValueOf(std.value.GetUInt())
+	case reflect.Uint8:
+		val = reflect.ValueOf(std.value.GetUInt8())
+	case reflect.Uint16:
+		val = reflect.ValueOf(std.value.GetUInt16())
+	case reflect.Uint32:
+		val = reflect.ValueOf(std.value.GetUInt32())
+	case reflect.Uint64:
+		val = reflect.ValueOf(std.value.GetUInt64())
+	case reflect.Float32:
+		val = reflect.ValueOf(std.value.GetFloat32())
+	case reflect.Float64:
+		val = reflect.ValueOf(std.value.GetFloat64())
+	case reflect.String:
+		val = reflect.ValueOf(std.value.GetString())
+	}
 	// -------------------------------------
 	if everyList, ok := std.extend["Everys"]; ok {
 		for _, funcEvery := range everyList.([]func(reflect.Value) reflect.Value) {

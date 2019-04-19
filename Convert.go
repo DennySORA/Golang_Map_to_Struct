@@ -5,6 +5,65 @@ import (
 	"strconv"
 )
 
+// ===============================================================================
+
+func mapConvert(mapData interface{}) map[string]Values {
+	returnData := map[string]Values{}
+	switch mapData.(type) {
+	case map[string]string:
+		for key, val := range mapData.(map[string]string) {
+			returnData[key] = Parse(val)
+		}
+	case map[string]int:
+		for key, val := range mapData.(map[string]int) {
+			returnData[key] = Parse(val)
+		}
+	case map[string]int8:
+		for key, val := range mapData.(map[string]int8) {
+			returnData[key] = Parse(val)
+		}
+	case map[string]int16:
+		for key, val := range mapData.(map[string]int16) {
+			returnData[key] = Parse(val)
+		}
+	case map[string]int32:
+		for key, val := range mapData.(map[string]int32) {
+			returnData[key] = Parse(val)
+		}
+	case map[string]int64:
+		for key, val := range mapData.(map[string]int64) {
+			returnData[key] = Parse(val)
+		}
+	case map[string]uint:
+		for key, val := range mapData.(map[string]uint) {
+			returnData[key] = Parse(val)
+		}
+	case map[string]uint16:
+		for key, val := range mapData.(map[string]uint16) {
+			returnData[key] = Parse(val)
+		}
+	case map[string]uint32:
+		for key, val := range mapData.(map[string]uint32) {
+			returnData[key] = Parse(val)
+		}
+	case map[string]uint64:
+		for key, val := range mapData.(map[string]uint64) {
+			returnData[key] = Parse(val)
+		}
+	case map[string]float32:
+		for key, val := range mapData.(map[string]float32) {
+			returnData[key] = Parse(val)
+		}
+	case map[string]float64:
+		for key, val := range mapData.(map[string]float64) {
+			returnData[key] = Parse(val)
+		}
+	}
+	return returnData
+}
+
+// ===============================================================================
+
 type Values struct {
 	Val  interface{}
 	Kind reflect.Kind
@@ -140,7 +199,7 @@ func (v *Values) GetInt8() int8 {
 	case reflect.Float64:
 		return int8(v.Val.(float64))
 	case reflect.String:
-		number, err := strconv.ParseInt(v.Val.(string), 10, 8)
+		number, err := strconv.ParseFloat(v.Val.(string), 64)
 		if err != nil {
 			return 0
 		} else {
@@ -184,7 +243,7 @@ func (v *Values) GetInt16() int16 {
 	case reflect.Float64:
 		return int16(v.Val.(float64))
 	case reflect.String:
-		number, err := strconv.ParseInt(v.Val.(string), 10, 16)
+		number, err := strconv.ParseFloat(v.Val.(string), 64)
 		if err != nil {
 			return 0
 		} else {
@@ -228,7 +287,7 @@ func (v *Values) GetInt32() int32 {
 	case reflect.Float64:
 		return int32(v.Val.(float64))
 	case reflect.String:
-		number, err := strconv.ParseInt(v.Val.(string), 10, 32)
+		number, err := strconv.ParseFloat(v.Val.(string), 64)
 		if err != nil {
 			return 0
 		} else {
@@ -272,7 +331,7 @@ func (v *Values) GetInt64() int64 {
 	case reflect.Float64:
 		return int64(v.Val.(float64))
 	case reflect.String:
-		number, err := strconv.ParseInt(v.Val.(string), 10, 64)
+		number, err := strconv.ParseFloat(v.Val.(string), 64)
 		if err != nil {
 			return 0
 		} else {
@@ -316,7 +375,7 @@ func (v *Values) GetUInt8() uint8 {
 	case reflect.Float64:
 		return uint8(v.Val.(float64))
 	case reflect.String:
-		number, err := strconv.ParseUint(v.Val.(string), 10, 8)
+		number, err := strconv.ParseFloat(v.Val.(string), 64)
 		if err != nil {
 			return 0
 		} else {
@@ -360,7 +419,7 @@ func (v *Values) GetUInt16() uint16 {
 	case reflect.Float64:
 		return uint16(v.Val.(float64))
 	case reflect.String:
-		number, err := strconv.ParseUint(v.Val.(string), 10, 16)
+		number, err := strconv.ParseFloat(v.Val.(string), 64)
 		if err != nil {
 			return 0
 		} else {
@@ -404,7 +463,7 @@ func (v *Values) GetUInt32() uint32 {
 	case reflect.Float64:
 		return uint32(v.Val.(float64))
 	case reflect.String:
-		number, err := strconv.ParseUint(v.Val.(string), 10, 32)
+		number, err := strconv.ParseFloat(v.Val.(string), 64)
 		if err != nil {
 			return 0
 		} else {
@@ -448,7 +507,7 @@ func (v *Values) GetUInt64() uint64 {
 	case reflect.Float64:
 		return uint64(v.Val.(float64))
 	case reflect.String:
-		number, err := strconv.ParseUint(v.Val.(string), 10, 8)
+		number, err := strconv.ParseFloat(v.Val.(string), 64)
 		if err != nil {
 			return 0
 		} else {
@@ -492,7 +551,7 @@ func (v *Values) GetInt() int {
 	case reflect.Float64:
 		return int(v.Val.(float64))
 	case reflect.String:
-		number, err := strconv.ParseInt(v.Val.(string), 10, 32)
+		number, err := strconv.ParseFloat(v.Val.(string), 64)
 		if err != nil {
 			return 0
 		} else {
@@ -536,7 +595,7 @@ func (v *Values) GetUInt() uint {
 	case reflect.Float64:
 		return uint(v.Val.(float64))
 	case reflect.String:
-		number, err := strconv.ParseUint(v.Val.(string), 10, 32)
+		number, err := strconv.ParseFloat(v.Val.(string), 64)
 		if err != nil {
 			return 0
 		} else {
@@ -582,7 +641,7 @@ func (v *Values) GetFloat32() float32 {
 	case reflect.Float64:
 		return float32(v.Val.(float64))
 	case reflect.String:
-		number, err := strconv.ParseFloat(v.Val.(string), 32)
+		number, err := strconv.ParseFloat(v.Val.(string), 64)
 		if err != nil {
 			return 0
 		} else {
